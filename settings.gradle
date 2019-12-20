@@ -1,0 +1,5 @@
+include 'spring-cloud-circuitbreaker'
+include 'spring-cloud-config'
+include 'spring-cloud-discovery'
+include 'spring-cloud-gateway'
+include 'spring-cloud-web1'

@@ -1,0 +1,64 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.1.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+}
+
+ext {
+    springCloudVersion = 'Hoxton.RELEASE'
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://repo.spring.io/milestone' }
+    }
+}
+
+subprojects {
+    group = 'com.example.spring.cloud'
+    version = '0.0.1-SNAPSHOT'
+
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    apply plugin: 'io.spring.dependency-management'
+
+    configurations {
+        testImplementation.extendsFrom compileOnly
+        testAnnotationProcessor.extendsFrom annotationProcessor
+    }
+
+    dependencies {
+        // lombok
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+
+        // spring
+        implementation 'org.springframework.boot:spring-boot-starter-actuator'
+        implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+
+        // use JUnit 5
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
+}
+
+wrapper {
+    gradleVersion = '5.6.4'
+}
+
